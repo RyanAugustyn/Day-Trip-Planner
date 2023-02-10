@@ -29,20 +29,19 @@ def readout_of_options(list):
 def user_feedback(user_list):
     answer = input("Are you satisfied with your trip 'yes' or 'no'?\n")
     #loop until readable answer given
-    while True:
-        if answer == 'yes':
-            print("Your final list:\n")
-            print(readout_of_options(user_list))
-            return 6  #program is continuing to run 
-        elif answer == 'no':
-            user_feedback = int(input("Choose what to change:\n1 for Destination\n2 for Restaurant\n3 for Transportation\n4 for Activity\n5 for everything\n"))
-            return user_feedback
-            break
-        else:
-            print("incorrect input, please try again")
-            continue
+    while answer != 'yes' and answer != 'no':
+        print("incorrect input, please try again\n")
+        answer = input("Are you satisfied with your trip 'yes' or 'no'?\n")
+    if answer == 'yes':
+        print("\nYour final list:\n")
+        readout_of_options(user_list)
+        return 0 #check in run_program if continue
+    elif answer == 'no':
+        user_feedback = int(input("Choose what to change:\n1 for Destination\n2 for Restaurant\n3 for Transportation\n4 for Activity\n5 for everything\n"))
+        return user_feedback
+        
 
-
+#return new item(s) based on user feeback 
 def get_new_item(user_feedback, user_list):
     if user_feedback == 5:  
         #rerun initial setup
@@ -55,13 +54,13 @@ def get_new_item(user_feedback, user_list):
         while new_item == unwanted_item:
             new_item = random.choice(list_to_change)
         return new_item
-    else:
-        print("Thank you")
 
-    
+#add in change from get_new_item function    
 def revise_list(user_list, user_change, new_item):
     index = user_change -1
     user_list[index] = new_item
+    return user_list
+
 
 def run_program(all_lists):
     #initial run
@@ -69,16 +68,13 @@ def run_program(all_lists):
     readout_of_options(user_list)
     #feedback
     feedback = user_feedback(user_list)
-    new_item = get_new_item(feedback, user_list)
-    revise_list(user_list, feedback, new_item)
+    if feedback != 0:
+        new_item = get_new_item(feedback, user_list)
+        user_list = revise_list(user_list, feedback, new_item)
+        print(user_list)
 
 
-
-
-
-
-
-
+###START PROGRAM###
 
 run_program(all_lists)
 
