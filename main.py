@@ -23,21 +23,24 @@ def trip_choices(list_of_lists):
 
 #print out randomly chosen items 
 def readout_of_options(list):
-    print(f"Destination: {list[0]}\nRestaurant: {list[1]}\nTransportation: {list[2]}\nActivity: {list[3]}\n")
+    print(f"\nDestination: {list[0]}\nRestaurant: {list[1]}\nTransportation: {list[2]}\nActivity: {list[3]}\n")
 
 #return int of user feedback 
 def user_feedback(user_list):
     answer = input("Are you satisfied with your trip 'yes' or 'no'?\n")
     #loop until readable answer given
     while answer != 'yes' and answer != 'no':
-        print("incorrect input, please try again\n")
-        answer = input("Are you satisfied with your trip 'yes' or 'no'?\n")
+        print("\nincorrect input, please try again\n")
+        answer = input("Are you satisfied with your trip 'yes' or 'no'?\n\n")
     if answer == 'yes':
-        print("\nYour final list:\n")
+        print("\nYour final list:")
         readout_of_options(user_list)
-        return 0 #check in run_program if continue
+        return 0 #check in run_program if continues or not
     elif answer == 'no':
-        user_feedback = int(input("Choose what to change:\n1 for Destination\n2 for Restaurant\n3 for Transportation\n4 for Activity\n5 for everything\n"))
+        user_feedback = int(input("\nChoose what to change:\n1 for Destination\n2 for Restaurant\n3 for Transportation\n4 for Activity\n5 for Everything\n6 for Surprise Me! (randomly picks 1-5)\n"))
+        while user_feedback < 1 or user_feedback > 6:
+            print("\nInvalid input, please choose from the following options\n")
+            user_feedback = int(input("Choose what to change:\n1 for Destination\n2 for Restaurant\n3 for Transportation\n4 for Activity\n5 for Everything\n6 for Surprise Me! (randomly picks 1-5)\n"))
         return user_feedback
         
 #return new item(s) based on user feeback 
@@ -46,7 +49,8 @@ def get_new_item(user_feedback, user_list):
     list_to_change = all_lists[index]
     unwanted_item = user_list[index]
     new_item = random.choice(list_to_change)
-    while new_item == unwanted_item:
+    #ensure old item is not reselected:
+    while new_item == unwanted_item:        
         new_item = random.choice(list_to_change)
     return new_item
 
@@ -69,7 +73,11 @@ def run_program(all_lists):
     readout_of_options(user_list)
     #feedback
     feedback = user_feedback(user_list)
+
     while(feedback != 0):
+        #choose option 6, surprise me
+        if feedback == 6:
+            feedback = random.randrange(1,5)
         if feedback >= 1 and feedback < 5:
             new_item = get_new_item(feedback, user_list)
             user_list = revise_list(user_list, feedback, new_item)
@@ -83,8 +91,3 @@ def run_program(all_lists):
 ###START PROGRAM###
 
 run_program(all_lists)
-
-
-#thought: add in list of choices that can be looped through to check if picked options 1-4
-
-
