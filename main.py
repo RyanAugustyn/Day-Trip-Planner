@@ -8,7 +8,7 @@ forms_of_entertainment =["Hiking", "Music Concert", "Surfing"]
 
 all_lists = [destinations, restaurants, modes_of_transportation, forms_of_entertainment]
 
-#functions 
+###FUNCTIONS###
 
 #pick random item from list 
 def pick_random_item(list_of_items):
@@ -21,9 +21,15 @@ def trip_choices(list_of_lists):
         temp_list.append(pick_random_item(list))
     return temp_list
 
-#print out randomly chosen items 
+#print out list items 
 def readout_of_options(list):
     print(f"\nDestination: {list[0]}\nRestaurant: {list[1]}\nTransportation: {list[2]}\nActivity: {list[3]}\n")
+
+#generate new list
+def get_new_list():
+    new_list = trip_choices(all_lists) 
+    readout_of_options(new_list)
+    return new_list
 
 #return int of user feedback 
 def user_feedback(user_list):
@@ -35,9 +41,10 @@ def user_feedback(user_list):
     if answer == 'yes':
         print("\nYour final list:")
         readout_of_options(user_list)
-        return 0 #check in run_program if continues or not
+        return 0 #check in run_program if ends program
     elif answer == 'no':
         user_feedback = int(input("\nChoose what to change:\n1 for Destination\n2 for Restaurant\n3 for Transportation\n4 for Activity\n5 for Everything\n6 for Surprise Me! (randomly picks 1-5)\n"))
+        #check for invalid input
         while user_feedback < 1 or user_feedback > 6:
             print("\nInvalid input, please choose from the following options\n")
             user_feedback = int(input("Choose what to change:\n1 for Destination\n2 for Restaurant\n3 for Transportation\n4 for Activity\n5 for Everything\n6 for Surprise Me! (randomly picks 1-5)\n"))
@@ -54,40 +61,32 @@ def get_new_item(user_feedback, user_list):
         new_item = random.choice(list_to_change)
     return new_item
 
-#start over with new list
-def get_new_list(user_list):
-    new_list = trip_choices(all_lists) 
-    readout_of_options(new_list)
-    return new_list
-
 #add in change from get_new_item function    
 def revise_list(user_list, user_change, new_item):
-    index = user_change -1
+    index = user_change - 1
     user_list[index] = new_item
     return user_list
 
 #program to run everything else
-def run_program(all_lists):
+def run_program():
     #initial run
-    user_list = trip_choices(all_lists)
-    readout_of_options(user_list)
+    user_list = get_new_list()
     #feedback
     feedback = user_feedback(user_list)
-
-    while(feedback != 0):
+    while(feedback != 0): # 0 = a 'yes' answer
         #choose option 6, surprise me
         if feedback == 6:
             feedback = random.randrange(1,5)
+        #specific choices 
         if feedback >= 1 and feedback < 5:
             new_item = get_new_item(feedback, user_list)
             user_list = revise_list(user_list, feedback, new_item)
             readout_of_options(user_list)
         elif feedback == 5:
-            user_list = get_new_list(user_list)  
-
+            user_list = get_new_list()  
         feedback = user_feedback(user_list)
 
 
 ###START PROGRAM###
 
-run_program(all_lists)
+run_program()
